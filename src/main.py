@@ -117,6 +117,36 @@ if __name__ == '__main__':
     res_final = pd.concat([res_curves, res_lp], ignore_index=True)    
     name = (directory + "/results-python.csv") 
     res_final.to_csv(name, index=False)
+
+    model_sizes = lccml.chain_model_sizes
+    total_model_size = lccml.total_model_size
+
+    df_sizes = pd.DataFrame({
+        'chain_index': list(range(len(model_sizes))),
+        'model_size_bytes': model_sizes
+    })
+
+    # Adiciona uma linha para o total
+    df_sizes.loc['total'] = ['-', total_model_size]
+    
+    name = (directory + "/model-size.csv")     
+    df_sizes.to_csv(name, index=False)
+
+    train_times = lccml.chain_train_times
+    train_time_total = lccml.train_time_total
+    test_time_total = lccml.test_time_total
+
+    df_times = pd.DataFrame({
+        'chain_index': list(range(len(train_times))),
+        'train_time': train_times
+    })
+
+    # Adiciona uma linha para o total
+    df_times.loc['total'] = ['-', train_time_total]
+    df_times['test_time_total'] = test_time_total  # repete o total para cada linha, ou ajuste como quiser
+
+    name = (directory + "/runtime-python.csv")     
+    df_times.to_csv(name, index=False)
   
     
 
